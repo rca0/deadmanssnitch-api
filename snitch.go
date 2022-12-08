@@ -1,6 +1,6 @@
 package main
 
-type DeadmanssnitchService service
+type SnitchService service
 
 type Snitch struct {
 	Name        string   `json:"name,omitempty"`
@@ -27,7 +27,7 @@ type SnitchResponse struct {
 	Tags        []string    `json:"tags,omitempty"`
 }
 
-func (s *DeadmanssnitchService) NewSnitch(snitch *Snitch) (*Snitch, *Response, error) {
+func (s *SnitchService) NewSnitch(snitch *Snitch) (*Snitch, *Response, error) {
 	u := "/v1/snitches"
 	v := new(Snitch)
 	payload := &Snitch{

@@ -31,7 +31,7 @@ type Client struct {
 	baseURL *url.URL
 	client  *http.Client
 	Config  *Config
-	Snitch  *Snitch
+	Snitch  *SnitchService
 }
 
 type Response struct {
@@ -71,7 +71,7 @@ func NewClient(config *Config) (*Client, error) {
 		Config:  config,
 	}
 
-	c.Snitch = NewSnitch(c)
+	c.Snitch = &SnitchService{c}
 
 	InitCache(c)
 	PopulateCache(c)
