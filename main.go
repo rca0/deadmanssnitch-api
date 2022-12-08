@@ -73,8 +73,8 @@ func NewClient(config *Config) (*Client, error) {
 
 	c.Snitch = &SnitchService{c}
 
-	InitCache(c)
-	PopulateCache(c)
+	// InitCache(c)
+	// PopulateCache(c)
 
 	return c, nil
 }
