@@ -30,6 +30,7 @@ type SnitchResponse struct {
 func (s *SnitchService) NewSnitch(snitch *Snitch) (*Snitch, *Response, error) {
 	u := "/v1/snitches"
 	v := new(Snitch)
+
 	payload := &Snitch{
 		Name:        snitch.Name,
 		Interval:    snitch.Interval,
