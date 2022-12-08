@@ -1,4 +1,4 @@
-package main
+package deadmanssnitch
 
 type SnitchService service
 
