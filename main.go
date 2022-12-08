@@ -17,7 +17,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	snitch, resp, err := client.Snitch.NewSnitch(&deadmanssnitch.Snitch{
+	resp, err := client.Snitch.NewSnitch(&deadmanssnitch.Snitch{
 		Name:     "testing-api",
 		Interval: "daily",
 	})
@@ -25,7 +25,5 @@ func main() {
 		log.Fatal(err)
 	}
 
-	if resp.Response.StatusCode == 200 {
-		fmt.Printf("Successfully created [%s]", snitch.Name)
-	}
+	fmt.Printf("Successfully created [%s]", resp.Name)
 }

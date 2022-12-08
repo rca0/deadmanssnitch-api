@@ -119,7 +119,7 @@ func (c *Client) newRequest(method, url string, body interface{}, opts ...Reques
 	return req, nil
 }
 
-func (c *Client) newRequestDo(method, url string, qryOptions, body, v interface{}) (*Response, error) {
+func (c *Client) newRequestDo(method, url string, qryOptions, body, v interface{}) ([]byte, error) {
 	if qryOptions != nil {
 		values, err := query.Values(qryOptions)
 		if err != nil {
@@ -139,68 +139,47 @@ func (c *Client) newRequestDo(method, url string, qryOptions, body, v interface{
 	return c.do(req, v)
 }
 
-func (c *Client) newRequestDoOptions(method, url string, qryOptions, body, v interface{}, reqOptions ...RequestOptions) (*Response, error) {
-	if qryOptions != nil {
-		values, err := query.Values(qryOptions)
-		if err != nil {
-			return nil, err
-		}
-		if v := values.Encode(); v != "" {
-			url = fmt.Sprintf("%s?%s", url, v)
-		}
-	}
-	req, err := c.newRequest(method, url, body, reqOptions...)
-	if err != nil {
-		return nil, err
-	}
-	return c.do(req, v)
-}
-
-func (c *Client) do(req *http.Request, v interface{}) (*Response, error) {
+func (c *Client) do(req *http.Request, v interface{}) ([]byte, error) {
 	resp, err := c.client.Do(req)
 	if err != nil {
 		return nil, err
 	}
+	defer resp.Body.Close()
 
 	bodyBytes, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		return nil, err
 	}
 
-	response := &Response{
-		Response:  resp,
-		BodyBytes: bodyBytes,
-	}
-
-	if err := c.checkResponse(response); err != nil {
-		return response, err
+	if err := c.checkResponse(resp, bodyBytes); err != nil {
+		return nil, err
 	}
 
 	if v != nil {
-		if err := c.DecodeJSON(response, v); err != nil {
-			return response, nil
+		if err := c.DecodeJSON(bodyBytes, v); err != nil {
+			return nil, nil
 		}
 	}
 
-	return response, nil
+	return bodyBytes, nil
 }
 
-func (c *Client) checkResponse(r *Response) error {
-	if r.Response.StatusCode >= 200 && r.Response.StatusCode <= 299 {
+func (c *Client) checkResponse(r *http.Response, b []byte) error {
+	if r.StatusCode >= 200 && r.StatusCode <= 299 {
 		return nil
 	}
-	return c.decodeErrorResponse(r)
+	return c.decodeErrorResponse(r, b)
 }
 
-func (c *Client) DecodeJSON(r *Response, v interface{}) error {
-	return json.Unmarshal(r.BodyBytes, v)
+func (c *Client) DecodeJSON(body []byte, v interface{}) error {
+	return json.Unmarshal(body, v)
 }
 
-func (c *Client) decodeErrorResponse(r *Response) error {
+func (c *Client) decodeErrorResponse(r *http.Response, b []byte) error {
 	v := &errorResponse{Error: &Error{ErrorResponse: r}}
 
-	if err := c.DecodeJSON(r, v); err != nil {
-		return fmt.Errorf("%s API call to %s failed: %v", r.Response.Request.Method, r.Response.Request.URL.String(), r.Response.Status)
+	if err := c.DecodeJSON(b, v); err != nil {
+		return fmt.Errorf("%s API call to %s failed: %v", r.Request.Method, r.Request.URL.String(), r.Status)
 	}
 
 	return v.Error

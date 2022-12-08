@@ -1,5 +1,7 @@
 package deadmanssnitch
 
+import "encoding/json"
+
 type SnitchService service
 
 type Snitch struct {
@@ -27,7 +29,7 @@ type SnitchResponse struct {
 	Tags        []string    `json:"tags,omitempty"`
 }
 
-func (s *SnitchService) NewSnitch(snitch *Snitch) (*Snitch, *Response, error) {
+func (s *SnitchService) NewSnitch(snitch *Snitch) (*SnitchResponse, error) {
 	u := "/v1/snitches"
 	v := new(Snitch)
 
@@ -40,13 +42,19 @@ func (s *SnitchService) NewSnitch(snitch *Snitch) (*Snitch, *Response, error) {
 		Tags:        snitch.Tags,
 	}
 
-	response, err := s.client.newRequestDo("POST", u, nil, payload, &v)
+	body, err := s.client.newRequestDo("POST", u, nil, payload, &v)
 	// to-do
 	// compare if snitch already exists
 
 	if err != nil {
-		return nil, nil, err
+		return nil, err
 	}
 
-	return v, response, nil
+	newSnitchResponse := SnitchResponse{}
+	err = json.Unmarshal(body, &newSnitchResponse)
+	if err != nil {
+		return nil, err
+	}
+
+	return &newSnitchResponse, nil
 }
