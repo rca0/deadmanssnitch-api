@@ -1,12 +1,14 @@
 package main
 
+type DeadmanssnitchService service
+
 type Snitch struct {
-	Name        string
-	interval    string
-	alert_type  string
-	alert_email []string
-	notes       string
-	tags        []string
+	Name        string   `json:"name,omitempty"`
+	Interval    string   `json:"interval,omitempty"`
+	Alert_type  string   `json:"alert_type,omitempty"`
+	Alert_email []string `json:"alert_email,omitempty"`
+	Notes       string   `json:"notes,omitempty"`
+	Tags        []string `json:"tags,omitempty"`
 }
 
 type SnitchResponse struct {
@@ -25,7 +27,22 @@ type SnitchResponse struct {
 	Tags        []string    `json:"tags,omitempty"`
 }
 
-func NewSnitch(client *Client) *Snitch {
-	// To be implemented
-	return &Snitch{}
+func (s *DeadmanssnitchService) NewSnitch(snitch *Snitch) (*Snitch, *Response, error) {
+	u := "/v1/snitches"
+	v := new(Snitch)
+	payload := &Snitch{
+		Name:        snitch.Name,
+		Interval:    snitch.Interval,
+		Alert_type:  snitch.Alert_type,
+		Alert_email: snitch.Alert_email,
+		Notes:       snitch.Notes,
+		Tags:        snitch.Tags,
+	}
+
+	response, err := s.client.newRequestDo("POST", u, nil, payload, &v)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	return v, response, nil
 }

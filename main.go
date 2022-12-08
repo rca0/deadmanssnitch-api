@@ -14,7 +14,7 @@ import (
 )
 
 const (
-	defaultBaseURL = "https://api.deadmanssnitch.com/v1/snitches"
+	defaultBaseURL = "https://api.deadmanssnitch.com"
 	contentType    = "application/json"
 	useragent      = "deadmanssnitch-api"
 )
@@ -43,6 +43,10 @@ type RequestOptions struct {
 	Type  string
 	Label string
 	Value string
+}
+
+type service struct {
+	client *Client
 }
 
 func NewClient(config *Config) (*Client, error) {
