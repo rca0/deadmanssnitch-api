@@ -46,6 +46,12 @@ type RequestOptions struct {
 }
 
 type Snitch struct {
+	Name        string
+	interval    string
+	alert_type  string
+	alert_email []string
+	notes       string
+	tags        []string
 }
 
 func NewClient(config *Config) (*Client, error) {
@@ -70,7 +76,7 @@ func NewClient(config *Config) (*Client, error) {
 		Config:  config,
 	}
 
-	c.Snitch = &Snitch{c}
+	c.Snitch = NewSnitch(c)
 
 	InitCache(c)
 	PopulateCache(c)
