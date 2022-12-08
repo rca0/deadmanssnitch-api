@@ -9,6 +9,7 @@ import (
 	"log"
 	"net/http"
 	"net/url"
+	"os"
 
 	"github.com/google/go-querystring/query"
 )
@@ -113,7 +114,7 @@ func (c *Client) newRequest(method, url string, body interface{}, opts ...Reques
 	if c.Config.UserAgent != "" {
 		req.Header.Add("User-Agent", c.Config.UserAgent)
 	}
-	req.SetBasicAuth(c.Config.ApiKey, "")
+	req.SetBasicAuth(c.Config.ApiKey, os.Getenv("DEADMANSSNITCH_APIKEY"))
 
 	return req, nil
 }
