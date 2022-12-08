@@ -198,3 +198,13 @@ func (c *Client) checkResponse(r *Response) error {
 func (c *Client) DecodeJSON(r *Response, v interface{}) error {
 	return json.Unmarshal(r.BodyBytes, v)
 }
+
+func (c *Client) decodeErrorResponse(r *Response) error {
+	v := &errorResponse{Error: &Error{ErrorResponse: r}}
+
+	if err := c.DecodeJSON(r, v); err != nil {
+		return fmt.Errorf("%s API call to %s failed: %v", r.Response.Request.Method, r.Response.Request.URL.String(), r.Response.Status)
+	}
+
+	return v.Error
+}
