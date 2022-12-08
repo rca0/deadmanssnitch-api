@@ -45,15 +45,6 @@ type RequestOptions struct {
 	Value string
 }
 
-type Snitch struct {
-	Name        string
-	interval    string
-	alert_type  string
-	alert_email []string
-	notes       string
-	tags        []string
-}
-
 func NewClient(config *Config) (*Client, error) {
 	if config.HTTPClient == nil {
 		config.HTTPClient = http.DefaultClient
