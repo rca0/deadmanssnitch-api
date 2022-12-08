@@ -1,6 +1,9 @@
 package deadmanssnitch
 
-import "encoding/json"
+import (
+	"encoding/json"
+	"fmt"
+)
 
 type SnitchService service
 
@@ -55,6 +58,8 @@ func (s *SnitchService) NewSnitch(snitch *Snitch) (*SnitchResponse, error) {
 	if err != nil {
 		return nil, err
 	}
+
+	fmt.Println(string(body))
 
 	return &newSnitchResponse, nil
 }
