@@ -194,6 +194,5 @@ func (c *Client) checkResponse(r *Response) error {
 }
 
 func (c *Client) DecodeJSON(r *Response, v interface{}) error {
-	// to be implemented
-	return nil
+	return json.Unmarshal(r.BodyBytes, v)
 }
