@@ -40,6 +40,9 @@ func (s *SnitchService) NewSnitch(snitch *Snitch) (*Snitch, *Response, error) {
 	}
 
 	response, err := s.client.newRequestDo("POST", u, nil, payload, &v)
+	// to-do
+	// compare if snitch already exists
+
 	if err != nil {
 		return nil, nil, err
 	}
