@@ -189,8 +189,10 @@ func (c *Client) do(req *http.Request, v interface{}) (*Response, error) {
 }
 
 func (c *Client) checkResponse(r *Response) error {
-	// to be implemented
-	return nil
+	if r.Response.StatusCode >= 200 && r.Response.StatusCode <= 299 {
+		return nil
+	}
+	return c.decodeErrorResponse(r)
 }
 
 func (c *Client) DecodeJSON(r *Response, v interface{}) error {
