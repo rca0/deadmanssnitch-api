@@ -113,6 +113,7 @@ func (c *Client) newRequest(method, url string, body interface{}, opts ...Reques
 	if c.Config.UserAgent != "" {
 		req.Header.Add("User-Agent", c.Config.UserAgent)
 	}
+	req.SetBasicAuth(c.Config.ApiKey, "")
 
 	return req, nil
 }
