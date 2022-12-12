@@ -1,4 +1,4 @@
-package deadmanssnitch
+package api
 
 import (
 	"fmt"

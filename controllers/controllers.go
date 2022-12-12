@@ -7,12 +7,12 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/rca0/deadmanssnitch-api/deadmanssnitch"
+	"github.com/rca0/deadmanssnitch-api/api"
 )
 
 func CreateSnitch() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		var snitch deadmanssnitch.Snitch
+		var snitch api.Snitch
 		err := json.NewDecoder(r.Body).Decode(&snitch)
 		if err != nil {
 			log.Printf("[x] invalid request payload: %s", err)
@@ -20,7 +20,7 @@ func CreateSnitch() http.HandlerFunc {
 		}
 		defer r.Body.Close()
 
-		client, err := deadmanssnitch.NewClient(&deadmanssnitch.Config{
+		client, err := api.NewClient(&api.Config{
 			ApiKey: os.Getenv("DEADMANSSNITCH_APIKEY"),
 		})
 		if err != nil {
