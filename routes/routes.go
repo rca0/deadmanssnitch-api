@@ -9,9 +9,6 @@ func SnitchRoute(router *mux.Router) {
 	// create new snitch
 	router.HandleFunc("/api/snitch", controllers.CreateSnitch()).Methods("POST")
 
-	// list snitches
-	router.HandleFunc("/api/snitch", controllers.GetSnitches()).Methods("GET")
-
 	// get snitch
 	router.HandleFunc("/api/snitch/{token}", controllers.GetSnitch()).Methods("GET")
 
@@ -20,4 +17,7 @@ func SnitchRoute(router *mux.Router) {
 
 	// delete snitch
 	router.HandleFunc("/api/snitch/{token}", controllers.GetSnitch()).Methods("DELETE")
+
+	// list snitches
+	router.HandleFunc("/api/snitches", controllers.GetSnitches()).Methods("GET")
 }
