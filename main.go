@@ -61,11 +61,11 @@ func CreateSnitch(w http.ResponseWriter, r *http.Request) {
 	fmt.Printf("Successfully created [%s]", resp.Name)
 }
 
-func GetSnitch(w http.ResponseWriter, r *http.Request) {
+func GetSnitches(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Not implemented yet :)")
 }
 
-func GetOneSnitch(w http.ResponseWriter, r *http.Request) {
+func GetSnitch(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Not implemented yet :)")
 }
 
