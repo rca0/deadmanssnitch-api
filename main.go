@@ -11,18 +11,17 @@ import (
 )
 
 func main() {
-	port := os.Getenv("PORT")
-	if port == "" {
+	port, ok := getEnv("PORT")
+	if !ok {
 		port = "8000"
 	}
 
-	apikey := os.Getenv("DEADMANSSNITCH_APIKEY")
-	if apikey == "" {
+	_, ok = getEnv("DEADMANSSNITCH_APIKEY")
+	if !ok {
 		log.Fatal("You should define the DEADMANSSNITCH_APIKEY environment variable, set and try again... :)")
 	}
 
 	router := mux.NewRouter()
-
 	routes.SnitchRoute(router)
 
 	log.Printf("Starting server http://0.0.0.0:%s...", port)
@@ -30,4 +29,13 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+}
+
+func getEnv(d string) (string, bool) {
+	data := os.Getenv(d)
+	if data == "" {
+		return "", false
+	}
+
+	return data, true
 }
