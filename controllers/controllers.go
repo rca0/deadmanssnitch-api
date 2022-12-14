@@ -119,12 +119,12 @@ func GetSnitch() http.HandlerFunc {
 
 func UpdateSnitch() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		fmt.Println("Not implemented yet :)")
+		w.WriteHeader(http.StatusNotImplemented)
 	}
 }
 
 func DeleteSnitch() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		fmt.Println("Not implemented yet :)")
+		w.WriteHeader(http.StatusNotImplemented)
 	}
 }
