@@ -17,6 +17,7 @@ func CreateSnitch() http.HandlerFunc {
 		err := json.NewDecoder(r.Body).Decode(&snitch)
 		if err != nil {
 			log.Printf("[x] invalid request payload: %s", err)
+			w.WriteHeader(http.StatusForbidden)
 			return
 		}
 		defer r.Body.Close()
@@ -48,12 +49,15 @@ func GetSnitches() http.HandlerFunc {
 		})
 		if err != nil {
 			fmt.Printf("[x] error when create new snitch client: %s", err)
+			w.WriteHeader(http.StatusForbidden)
 			return
 		}
 
 		resp, err := client.Snitch.GetSnitches()
 		if err != nil {
 			log.Printf("[x] could not get any snitch: %s", err)
+			w.WriteHeader(http.StatusNotFound)
+			return
 		}
 
 		// HTTP 302 - Found
@@ -74,7 +78,7 @@ func GetSnitch() http.HandlerFunc {
 		})
 		if err != nil {
 			fmt.Printf("[x] error when create new snitch client: %s", err)
-			w.WriteHeader(http.StatusServiceUnavailable)
+			w.WriteHeader(http.StatusForbidden)
 			return
 		}
 
