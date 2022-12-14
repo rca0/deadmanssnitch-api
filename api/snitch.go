@@ -83,8 +83,10 @@ func (s *SnitchService) GetSnitches() (*[]SnitchResponse, error) {
 
 func (s *SnitchService) GetSnitch(token string) (*SnitchResponse, error) {
 	newSnitchResponse := SnitchResponse{}
+	// eg: https://api.deadmanssnitch.com/v1/snitches/c2354d53d2
+	urlPathWithToken := fmt.Sprintf("%s/%s", urlPath, token)
 
-	body, err := s.client.newRequestDo("GET", urlPath, nil, nil, nil)
+	body, err := s.client.newRequestDo("GET", urlPathWithToken, nil, nil, nil)
 	if err != nil {
 		return nil, err
 	}
