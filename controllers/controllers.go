@@ -106,10 +106,14 @@ func GetSnitch() http.HandlerFunc {
 			return
 		}
 
-		w.WriteHeader(http.StatusFound)
+		snitchResp, err := json.Marshal(resp)
+		if err != nil {
+			log.Printf("[x] could not marshal the Snitch Response: %s", err)
+			return
+		}
 
-		fmt.Println("[x] wow! look what i found...")
-		fmt.Printf("[x] Snitch: %s", resp.Name)
+		w.WriteHeader(http.StatusFound)
+		w.Write(snitchResp)
 	}
 }
 
