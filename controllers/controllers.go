@@ -52,6 +52,7 @@ func CreateSnitch() http.HandlerFunc {
 
 func GetSnitches() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
+		snitches := []api.SnitchResponse{}
 		client, err := api.NewClient(&api.Config{
 			ApiKey: os.Getenv("DEADMANSSNITCH_APIKEY"),
 		})
@@ -70,10 +71,18 @@ func GetSnitches() http.HandlerFunc {
 
 		// HTTP 302 - Found
 		w.WriteHeader(http.StatusFound)
-		fmt.Println("[x] wow! look what i found...")
-		for i, v := range *resp {
-			fmt.Printf("[x] %d Snitch: %s", i+1, v.Name)
+		for _, v := range *resp {
+			snitches = append(snitches, v)
 		}
+
+		snitchResponses, err := json.Marshal(snitches)
+		if err != nil {
+			log.Printf("[x] could not marshal the Snitches Responses: %s", err)
+			return
+		}
+
+		w.WriteHeader(http.StatusCreated)
+		w.Write(snitchResponses)
 	}
 }
 
