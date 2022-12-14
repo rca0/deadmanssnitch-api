@@ -60,8 +60,6 @@ func (s *SnitchService) NewSnitch(snitch *Snitch) (*SnitchResponse, error) {
 		return nil, err
 	}
 
-	fmt.Println(string(body))
-
 	return &newSnitchResponse, nil
 }
 
