@@ -66,19 +66,19 @@ func (s *SnitchService) NewSnitch(snitch *Snitch) (*SnitchResponse, error) {
 }
 
 func (s *SnitchService) GetSnitches() (*[]SnitchResponse, error) {
-	listSnitch := []SnitchResponse{}
+	listSnitches := []SnitchResponse{}
 
 	body, err := s.client.newRequestDo("GET", urlPath, nil, nil, nil)
 	if err != nil {
 		return nil, err
 	}
 
-	err = json.Unmarshal(body, &listSnitch)
+	err = json.Unmarshal(body, &listSnitches)
 	if err != nil {
 		return nil, err
 	}
 
-	return &listSnitch, err
+	return &listSnitches, err
 }
 
 func (s *SnitchService) GetSnitch(token string) (*SnitchResponse, error) {
