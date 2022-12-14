@@ -80,3 +80,19 @@ func (s *SnitchService) GetSnitches() (*[]SnitchResponse, error) {
 
 	return &listSnitch, err
 }
+
+func (s *SnitchService) GetSnitch(token string) (*SnitchResponse, error) {
+	newSnitchResponse := SnitchResponse{}
+
+	body, err := s.client.newRequestDo("GET", urlPath, nil, nil, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	err = json.Unmarshal(body, &newSnitchResponse)
+	if err != nil {
+		return nil, err
+	}
+
+	return &newSnitchResponse, nil
+}
