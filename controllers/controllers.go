@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/gorilla/mux"
 	"github.com/rca0/deadmanssnitch-api/api"
 )
 
@@ -66,7 +67,27 @@ func GetSnitches() http.HandlerFunc {
 
 func GetSnitch() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		fmt.Println("Not implemented yet :)")
+		params := mux.Vars(r)
+		token := params["token"]
+		client, err := api.NewClient(&api.Config{
+			ApiKey: os.Getenv("DEADMANSSNITCH_APIKEY"),
+		})
+		if err != nil {
+			fmt.Printf("[x] error when create new snitch client: %s", err)
+			w.WriteHeader(http.StatusServiceUnavailable)
+			return
+		}
+
+		resp, err := client.Snitch.GetSnitch(token)
+		if err != nil {
+			log.Printf("[x] could not find the snitch: %s", err)
+			w.WriteHeader(http.StatusNotFound)
+			return
+		}
+
+		w.WriteHeader(http.StatusFound)
+		fmt.Println("[x] wow! look what i found...")
+		fmt.Printf("[x] Snitch: %s", resp.Name)
 	}
 }
 
