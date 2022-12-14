@@ -4,19 +4,20 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"os"
 
 	"github.com/gorilla/mux"
+	"github.com/rca0/deadmanssnitch-api/config"
 	"github.com/rca0/deadmanssnitch-api/routes"
 )
 
 func main() {
-	port, ok := getEnv("PORT")
+	config.InitLoadConfigs()
+	port, ok := config.GetEnv("PORT")
 	if !ok {
 		port = "8000"
 	}
 
-	_, ok = getEnv("DEADMANSSNITCH_APIKEY")
+	_, ok = config.GetEnv("DEADMANSSNITCH_APIKEY")
 	if !ok {
 		log.Fatal("You should define the DEADMANSSNITCH_APIKEY environment variable, set and try again... :)")
 	}
@@ -29,13 +30,4 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-}
-
-func getEnv(d string) (string, bool) {
-	data := os.Getenv(d)
-	if data == "" {
-		return "", false
-	}
-
-	return data, true
 }
