@@ -65,8 +65,8 @@ func (s *SnitchService) NewSnitch(snitch *Snitch) (*SnitchResponse, error) {
 	return &newSnitchResponse, nil
 }
 
-func (s *SnitchService) GetSnitches() (*[]Snitch, error) {
-	listSnitch := []Snitch{}
+func (s *SnitchService) GetSnitches() (*[]SnitchResponse, error) {
+	listSnitch := []SnitchResponse{}
 
 	body, err := s.client.newRequestDo("GET", urlPath, nil, nil, nil)
 	if err != nil {
