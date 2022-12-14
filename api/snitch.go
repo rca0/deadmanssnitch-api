@@ -5,6 +5,8 @@ import (
 	"fmt"
 )
 
+const urlPath string = "/v1/snitches"
+
 type SnitchService service
 
 type Snitch struct {
@@ -33,8 +35,8 @@ type SnitchResponse struct {
 }
 
 func (s *SnitchService) NewSnitch(snitch *Snitch) (*SnitchResponse, error) {
-	u := "/v1/snitches"
 	v := new(Snitch)
+	newSnitchResponse := SnitchResponse{}
 
 	payload := &Snitch{
 		Name:        snitch.Name,
@@ -45,7 +47,7 @@ func (s *SnitchService) NewSnitch(snitch *Snitch) (*SnitchResponse, error) {
 		Tags:        snitch.Tags,
 	}
 
-	body, err := s.client.newRequestDo("POST", u, nil, payload, &v)
+	body, err := s.client.newRequestDo("POST", urlPath, nil, payload, &v)
 	// to-do
 	// compare if snitch already exists
 
@@ -53,7 +55,6 @@ func (s *SnitchService) NewSnitch(snitch *Snitch) (*SnitchResponse, error) {
 		return nil, err
 	}
 
-	newSnitchResponse := SnitchResponse{}
 	err = json.Unmarshal(body, &newSnitchResponse)
 	if err != nil {
 		return nil, err
@@ -62,4 +63,20 @@ func (s *SnitchService) NewSnitch(snitch *Snitch) (*SnitchResponse, error) {
 	fmt.Println(string(body))
 
 	return &newSnitchResponse, nil
+}
+
+func (s *SnitchService) GetSnitches() (*[]Snitch, error) {
+	listSnitch := []Snitch{}
+
+	body, err := s.client.newRequestDo("GET", urlPath, nil, nil, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	err = json.Unmarshal(body, &listSnitch)
+	if err != nil {
+		return nil, err
+	}
+
+	return &listSnitch, err
 }

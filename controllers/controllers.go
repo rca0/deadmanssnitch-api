@@ -42,7 +42,25 @@ func CreateSnitch() http.HandlerFunc {
 
 func GetSnitches() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		fmt.Println("Not implemented yet :)")
+		client, err := api.NewClient(&api.Config{
+			ApiKey: os.Getenv("DEADMANSSNITCH_APIKEY"),
+		})
+		if err != nil {
+			fmt.Printf("[x] error when create new snitch client: %s", err)
+			return
+		}
+
+		resp, err := client.Snitch.GetSnitches()
+		if err != nil {
+			log.Printf("[x] could not get any snitch: %s", err)
+		}
+
+		// HTTP 302 - Found
+		w.WriteHeader(http.StatusFound)
+		fmt.Println("[x] wow! look what i found...")
+		for i, v := range *resp {
+			fmt.Printf("[x] %d Snitch: %s", i+1, v.Name)
+		}
 	}
 }
 
