@@ -1,3 +1,4 @@
+# WIP
 # deadmanssnitch-api
 
 API written in Golang - https://deadmanssnitch.com/
